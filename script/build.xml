@@ -20,6 +20,12 @@
         </fileset>
     </path>
 
+    <path id="aux.class.path">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
     <path id="findbugs.class.path">
         <pathelement location="${build.classes.dir}"/>
         <fileset dir="${build.lib.dir}">
@@ -186,6 +192,7 @@
                   jvmargs="-Xmx512m"
                   timeout="1200000">
             <classpath refid="build.class.path"/>
+            <auxclasspath refid="aux.class.path"/>
             <class location="${build.classes.dir}"/>
         </findbugs>
 

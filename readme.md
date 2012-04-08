@@ -8,4 +8,4 @@ This is a simple forum to demonstrate some of the other projects:
 
 The forum exaple is running here:
 
-[Forum example]http://forum.astraeus.nl/ 
+[Forum example](http://forum.astraeus.nl/) 

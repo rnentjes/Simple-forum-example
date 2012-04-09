@@ -376,8 +376,30 @@
 
     <target name="jar" depends="compile, copynonjavafiles" description="Create jar distribution dir">
 
+        <copy todir="${jar.dir}/lib">
+            <fileset dir="${lib.dir}" includes="*.jar"/>
+        </copy>
+
+        <manifestclasspath property="jar.class.path"
+                           jarfile="${jar.dir}/${jar.name}.jar">
+            <classpath refid="project.class.path"/>
+        </manifestclasspath>
+
+        <pathconvert property="manifest.classpath" pathsep=" ">
+            <path refid="project.class.path"/>
+            <mapper>
+                <chainedmapper>
+                    <flattenmapper/>
+                    <globmapper from="*.jar" to="lib/*.jar"/>
+                </chainedmapper>
+            </mapper>
+        </pathconvert>
+
         <jar destfile="${jar.dir}/${jar.name}.jar" basedir="${build.classes.dir}">
-            <manifest />
+            <manifest>
+                <attribute name="Main-Class" value="nl.astraeus.forum.web.HttpServer"/>
+                <attribute name="Class-Path" value="${manifest.classpath}"/>
+            </manifest>
         </jar>
 
     </target>

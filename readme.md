@@ -9,3 +9,5 @@ This is a simple forum to demonstrate some of the other projects:
 The forum example is running here:
 
 [Forum example](http://forum.astraeus.nl/) 
+
+Register to be able to post new topics.

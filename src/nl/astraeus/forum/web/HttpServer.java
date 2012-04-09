@@ -10,7 +10,13 @@ import nl.astraeus.http.SimpleWebServer;
 public class HttpServer {
     
     public static void main(String [] args) throws Exception {
-        SimpleWebServer server = new SimpleWebServer(8080);
+        int port = 8080;
+
+        if (args.length == 1) {
+            port = Integer.parseInt(args[0]);
+        }
+
+        SimpleWebServer server = new SimpleWebServer(port);
 
         server.addServlet(new ResourceServlet(), "/resources/*");
         server.addServlet(new ForumServlet(), "/");

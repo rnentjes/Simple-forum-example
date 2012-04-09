@@ -1,7 +1,6 @@
 package nl.astraeus.forum.model;
 
 import nl.astraeus.prevayler.*;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -31,9 +30,7 @@ public class Topic extends PrevaylerModel {
     }
     
     public String getTitle() {
-        String title = this.title;
-
-        return StringEscapeUtils.escapeHtml(title);
+        return this.title;
     }
 
     public String getShortTitle() {
@@ -42,7 +39,8 @@ public class Topic extends PrevaylerModel {
         if (title.length() > 50) {
             title = title.substring(0, 47)+"...";
         }
-        return StringEscapeUtils.escapeHtml(title);
+
+        return title;
     }
 
     public void setTitle(String title) {
@@ -80,7 +78,6 @@ public class Topic extends PrevaylerModel {
     public PrevaylerList<Comment> getComments() {
         if (comments == null) {
             comments = new PrevaylerList<Comment>(Comment.class);
-            // comments = new PrevaylerSortedSet<Comment>(Comment.class, new CommentComparator());
         }
 
         return comments;

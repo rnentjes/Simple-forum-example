@@ -49,7 +49,7 @@ public class MemberDao extends PrevaylerDao<Member> {
 
     @Override
     public void store(Member model) {
-        System.out.println("Storing member ("+model+") "+model.getEscapedNickName()+", topics: "+model.getTopics().size()+", comments: "+model.getComments().size());
+        System.out.println("Storing member ("+model+") "+model.getNickName()+", topics: "+model.getTopics().size()+", comments: "+model.getComments().size());
 
         super.store(model);
     }

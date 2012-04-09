@@ -1,3 +1,5 @@
+{escape(html)}
+
 {if(warnings)}
   {foreach(warnings as warn}
     <div class="alert">
@@ -13,7 +15,7 @@
         <label class="control-label" for="input01">Nickname</label>
 
         <div class="controls">
-            <input type="text" name="nickName" class="input-xlarge" id="input01" value="{member.escapedNickName}">
+            <input type="text" name="nickName" class="input-xlarge" id="input01" value="{member.nickName}">
             <!-- <p class="help-block">Supporting help text</p> -->
         </div>
     </div>
@@ -21,7 +23,7 @@
         <label class="control-label" for="input02">Email</label>
 
         <div class="controls">
-            <input type="text" name="email" class="input-xlarge" id="input02" value="{member.escapedEmail}">
+            <input type="text" name="email" class="input-xlarge" id="input02" value="{member.email}">
             <!-- <p class="help-block">Supporting help text</p> -->
         </div>
     </div>

@@ -2,7 +2,6 @@ package nl.astraeus.forum.model;
 
 import nl.astraeus.prevayler.PrevaylerList;
 import nl.astraeus.prevayler.PrevaylerModel;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,20 +39,16 @@ public class Member extends PrevaylerModel {
         return nickName;
     }
 
-    public String getEscapedNickName() {
-        return StringEscapeUtils.escapeHtml(nickName);
-    }
-    
-    public String getEscapedEmail() {
-        return StringEscapeUtils.escapeHtml(email);
-    }
-
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setPassword(String password) {
@@ -77,7 +72,7 @@ public class Member extends PrevaylerModel {
     }
 
     public String toString() {
-        return getEscapedNickName();
+        return getNickName();
     }
 
     public PrevaylerList<Comment> getComments() {

@@ -2,7 +2,6 @@ package nl.astraeus.forum.model;
 
 import nl.astraeus.prevayler.PrevaylerModel;
 import nl.astraeus.prevayler.PrevaylerReference;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,11 +35,7 @@ public class Comment extends PrevaylerModel {
     }
 
     public String getDescription() {
-        return StringEscapeUtils.escapeHtml(description);
-    }
-
-    public String getDescriptionHtml() {
-        return StringEscapeUtils.escapeHtml(description).replaceAll("(\r\n|\n)", "<br/>");
+        return description;
     }
 
     public String getShortDescription() {
@@ -50,7 +45,7 @@ public class Comment extends PrevaylerModel {
             description = description.substring(0, 47)+"...";
         }
 
-        return StringEscapeUtils.escapeHtml(description);
+        return description;
     }
     
     public String getDate() {

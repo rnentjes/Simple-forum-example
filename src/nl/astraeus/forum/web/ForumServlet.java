@@ -2,11 +2,11 @@ package nl.astraeus.forum.web;
 
 import nl.astraeus.forum.model.Member;
 import nl.astraeus.forum.model.MemberDao;
+import nl.astraeus.forum.util.IOUtils;
 import nl.astraeus.forum.web.page.*;
 import nl.astraeus.prevayler.PrevaylerStore;
 import nl.astraeus.prevayler.Transaction;
 import nl.astraeus.util.Util;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

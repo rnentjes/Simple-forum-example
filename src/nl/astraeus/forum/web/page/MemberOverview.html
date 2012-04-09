@@ -1,3 +1,5 @@
+{escape(html)}
+
 <table class="table">
     <thead>
     <tr>
@@ -13,8 +15,8 @@
     <tbody>
     {foreach(members as member)}
     <tr>
-        <td>{member.escapedNickName}</td>
-        <td>{member.escapedEmail}</td>
+        <td>{member.nickName}</td>
+        <td>{member.email}</td>
         <td>{member.numberOfTopics}</td>
         <td>{member.numberOfComments}</td>
         <td>{member.lastPost}</td>

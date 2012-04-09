@@ -1,5 +1,6 @@
 package nl.astraeus.forum.web.page;
 
+import nl.astraeus.template.EscapeMode;
 import nl.astraeus.template.SimpleTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,7 @@ public abstract class TemplatePage extends Page {
             try {
                 in = cls.getResourceAsStream(cls.getSimpleName() + ".html");
 
-                result = SimpleTemplate.readTemplate('{','}', in);
+                result = SimpleTemplate.readTemplate('{','}', EscapeMode.HTML, in);
 
                 templateCache.put(cls, result);
             } catch (IOException e) {

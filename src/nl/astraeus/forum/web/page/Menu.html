@@ -1,3 +1,5 @@
+{escape(html)}
+
 <div id="topmenu" class="navbar navbar-fixed-top" >
     <div class="navbar-inner">
         <div class="container">
@@ -9,7 +11,7 @@
             <a class="brand" href="#">Simple Example Forum</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li class=""><a href="#" onclick="submit('menumain');">Forum</a></li>
+                    <li class=""><a onclick="submit('menumain');">Forum</a></li>
                 </ul>
 
                 {if(user.superuser)}
@@ -30,8 +32,8 @@
                 {endif}
 
                 <ul class="nav pull-right">
-                    {if(user.escapedNickName)}
-                    <li class=""><a onclick="submit('menulogout');">Logout {user.escapedNickName}</a></li>
+                    {if(user.nickName)}
+                    <li class=""><a onclick="submit('menulogout');">Logout {user.nickName}</a></li>
                     {else}
                     <li class=""><a onclick="submit('menulogin');">Login</a></li>
                     <li><a onclick="submit('menuregister');">Register</a></li>

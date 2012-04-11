@@ -1,7 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.prevayler.PrevaylerList;
-import nl.astraeus.prevayler.PrevaylerModel;
+import nl.astraeus.persistence.SimpleList;
+import nl.astraeus.persistence.SimpleModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:16 PM
  */
-public class Member extends PrevaylerModel {
+public class Member extends SimpleModel {
     public final static long serialVersionUID = 1L;
 
     private String nickName;
@@ -21,8 +21,8 @@ public class Member extends PrevaylerModel {
     private boolean superuser;
     private Date created;
     private Date lastPost;
-    private PrevaylerList<Comment> comments;
-    private PrevaylerList<Topic> topics;
+    private SimpleList<Comment> comments;
+    private SimpleList<Topic> topics;
 
     public Member() {
         this("","","");
@@ -75,17 +75,17 @@ public class Member extends PrevaylerModel {
         return getNickName();
     }
 
-    public PrevaylerList<Comment> getComments() {
+    public SimpleList<Comment> getComments() {
         if (comments == null) {
-            comments = new PrevaylerList<Comment>(Comment.class);
+            comments = new SimpleList<Comment>(Comment.class);
         }
         
         return comments;
     }
 
-    public PrevaylerList<Topic> getTopics() {
+    public SimpleList<Topic> getTopics() {
         if (topics == null) {
-            topics = new PrevaylerList<Topic>(Topic.class);
+            topics = new SimpleList<Topic>(Topic.class);
         }
 
         return topics;

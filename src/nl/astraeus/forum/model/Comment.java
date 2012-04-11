@@ -1,7 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.prevayler.PrevaylerModel;
-import nl.astraeus.prevayler.PrevaylerReference;
+import nl.astraeus.persistence.SimpleModel;
+import nl.astraeus.persistence.SimpleReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,12 +12,12 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:14 PM
  */
-public class Comment extends PrevaylerModel {
+public class Comment extends SimpleModel {
     public final static long serialVersionUID = -9038882251579382910L;
 
     private long date = System.currentTimeMillis();
     private String description = "";
-    private PrevaylerReference<Member> creator = new PrevaylerReference<Member>(Member.class);
+    private SimpleReference<Member> creator = new SimpleReference<Member>(Member.class);
 
     public Comment() {}
 

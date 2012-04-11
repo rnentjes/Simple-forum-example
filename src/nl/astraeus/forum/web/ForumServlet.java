@@ -4,8 +4,8 @@ import nl.astraeus.forum.model.Member;
 import nl.astraeus.forum.model.MemberDao;
 import nl.astraeus.forum.util.IOUtils;
 import nl.astraeus.forum.web.page.*;
-import nl.astraeus.prevayler.PrevaylerStore;
-import nl.astraeus.prevayler.Transaction;
+import nl.astraeus.persistence.SimpleStore;
+import nl.astraeus.persistence.Transaction;
 import nl.astraeus.util.Util;
 
 import javax.servlet.ServletException;
@@ -69,8 +69,8 @@ public class ForumServlet extends HttpServlet {
             throw new ServletException(e);
         }
 
-        System.setProperty(PrevaylerStore.AUTOCOMMIT, String.valueOf(false));
-        System.setProperty(PrevaylerStore.SAFEMODE, String.valueOf(true));
+        System.setProperty(SimpleStore.AUTOCOMMIT, String.valueOf(false));
+        System.setProperty(SimpleStore.SAFEMODE, String.valueOf(true));
     }
 
     @Override

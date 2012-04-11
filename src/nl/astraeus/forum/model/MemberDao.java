@@ -1,7 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.prevayler.Filter;
-import nl.astraeus.prevayler.PrevaylerDao;
+import nl.astraeus.persistence.Filter;
+import nl.astraeus.persistence.SimpleDao;
 
 import java.util.Collection;
 
@@ -10,7 +10,7 @@ import java.util.Collection;
  * Date: 3/28/12
  * Time: 8:42 PM
  */
-public class MemberDao extends PrevaylerDao<Member> {
+public class MemberDao extends SimpleDao<Member> {
     
     private static class NickNameFilter extends Filter<Member> {
         private String nickName;

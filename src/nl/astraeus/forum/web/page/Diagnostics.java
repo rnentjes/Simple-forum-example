@@ -2,7 +2,7 @@ package nl.astraeus.forum.web.page;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
 import nl.astraeus.forum.model.*;
-import nl.astraeus.prevayler.PrevaylerStore;
+import nl.astraeus.persistence.SimpleStore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public class Diagnostics extends TemplatePage {
     public Map<String, Object> defineModel(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        result.put("objectMap", PrevaylerStore.get().getObjectTypeMap().entrySet());
+        result.put("objectMap", SimpleStore.get().getObjectTypeMap().entrySet());
 
         result.put("userMemory", ((Runtime.getRuntime().totalMemory() / (1024 * 1024)) - (Runtime.getRuntime().freeMemory() / (1024 * 1024))));
         result.put("freeMemory", (Runtime.getRuntime().freeMemory() / (1024 * 1024)));

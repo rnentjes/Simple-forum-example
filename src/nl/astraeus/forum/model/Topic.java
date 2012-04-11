@@ -1,6 +1,8 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.prevayler.*;
+import nl.astraeus.persistence.SimpleList;
+import nl.astraeus.persistence.SimpleModel;
+import nl.astraeus.persistence.SimpleReference;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -13,15 +15,16 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:14 PM
  */
-public class Topic extends PrevaylerModel {
+public class Topic extends SimpleModel {
     public final static long serialVersionUID = -9038882251579382910L;
 
     private long date = System.currentTimeMillis();
     private String title = "";
-    private PrevaylerReference<Member> creator = new PrevaylerReference<Member>(Member.class);
-    private PrevaylerList<Comment> comments;
+    private SimpleReference<Member> creator = new SimpleReference<Member>(Member.class);
+    private SimpleList<Comment> comments;
     private int views;
     private Date lastPost;
+    private DateFormat format = null;
 
     public Topic() {}
     
@@ -46,11 +49,17 @@ public class Topic extends PrevaylerModel {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    private DateFormat getFormat() {
+        if (format == null) {
+            format = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+        }
+
+        return format;
+    }
     
     public String getDate() {
-        DateFormat format = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-        
-        return format.format(date);
+        return getFormat().format(new Date(date));
     }
     
     public void addComment(Comment comment) {
@@ -75,9 +84,9 @@ public class Topic extends PrevaylerModel {
         }
     }
 
-    public PrevaylerList<Comment> getComments() {
+    public SimpleList<Comment> getComments() {
         if (comments == null) {
-            comments = new PrevaylerList<Comment>(Comment.class);
+            comments = new SimpleList<Comment>(Comment.class);
         }
 
         return comments;
@@ -99,9 +108,7 @@ public class Topic extends PrevaylerModel {
         String result = "never";
 
         if (lastPost != null && lastPost.getTime() != 0) {
-            DateFormat format = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-
-            result = format.format(lastPost);
+            result = getFormat().format(lastPost);
         }
 
         return result;

@@ -64,7 +64,7 @@
 
     <script type="text/javascript">
         function submit(action, actionValue) {
-            var params = 'ajax=true&action=' + action + '&actionValue=' + actionValue + '&' + $("#form").serialize();
+            var params = 'ajax=true&action=' + action + '&' + $("#form").serialize();
 
             if(document.selection && document.selection.empty) {
                 document.selection.empty();
@@ -86,8 +86,8 @@
             return false;
         }
 
-        function ajax(action, href) {
-            var params = 'ajax=true&' + $("#form").serialize();
+        function ajax(href, action, actionValue) {
+            var params = 'ajax=true&action=' + action + '&actionValue=' + actionValue + '&' + $("#form").serialize();
 
             if(document.selection && document.selection.empty) {
                 document.selection.empty();
@@ -108,6 +108,14 @@
 
             return false;
         }
+
+        console.log(window.location.hash);
+        if (window.location.hash && window.location.hash.indexOf("#!/") == 0) {
+            console.log(window.location.hash.substring(3));
+            ajax(window.location.hash.substring(3));
+        } else {
+            ajax('overview');
+        }
     </script>
 
 </head>
@@ -117,3 +125,13 @@
 
     <div class="container" id="content">
 
+    </div>
+
+</form>
+
+<script type="text/javascript" src="resources/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap-collapse.js"></script>
+
+</body>
+</html>

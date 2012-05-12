@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Simple-forum-example.iml" filepath="$PROJECT_DIR$/Simple-forum-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Simple-servlet-runner/Simple-servlet-runner.iml" filepath="$PROJECT_DIR$/../Simple-servlet-runner/Simple-servlet-runner.iml" />
     </modules>
   </component>
 </project>

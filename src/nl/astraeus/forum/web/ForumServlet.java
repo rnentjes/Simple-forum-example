@@ -6,6 +6,7 @@ import nl.astraeus.forum.util.IOUtils;
 import nl.astraeus.forum.web.page.*;
 import nl.astraeus.prevayler.PrevaylerStore;
 import nl.astraeus.prevayler.Transaction;
+import nl.astraeus.template.ReflectHelper;
 import nl.astraeus.util.Util;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: rnentjes
@@ -22,14 +28,24 @@ import java.io.IOException;
  */
 public class ForumServlet extends HttpServlet {
 
-    private String head;
-    private String bottom;
+    private String basic;
+
+    private Map<String, Class<? extends Page>> pageClassMapping = new HashMap<String, Class<? extends Page>>();
 
     @Override
     public void init() throws ServletException {
         super.init();
 
-        new Transaction() {
+        pageClassMapping.put("", ForumOverview.class);
+        pageClassMapping.put("overview", ForumOverview.class);
+        pageClassMapping.put("diagnostics", Diagnostics.class);
+        pageClassMapping.put("login", Login.class);
+        pageClassMapping.put("registration", Registration.class);
+        pageClassMapping.put("logout", ForumOverview.class);
+        pageClassMapping.put("members", MemberOverview.class);
+
+
+            new Transaction() {
             @Override
             public void execute() {
                 MemberDao dao = new MemberDao();
@@ -63,8 +79,7 @@ public class ForumServlet extends HttpServlet {
         };
 
         try {
-            head = IOUtils.toString(getClass().getResourceAsStream("head.html"));
-            bottom = IOUtils.toString(getClass().getResourceAsStream("bottom.html"));
+            basic = IOUtils.toString(getClass().getResourceAsStream("basic.html"));
         } catch (IOException e) {
             throw new ServletException(e);
         }
@@ -87,32 +102,53 @@ public class ForumServlet extends HttpServlet {
 
         resp.setContentType("text/html");
 
-        Page page = (Page)session.getAttribute("page");
-        Page menu = (Page)session.getAttribute("menu");
+        Page page = new ForumOverview();
+        Page menu = new Menu();
 
         session.setMaxInactiveInterval(1800);
 
-        if (menu == null) {
-            menu = new Menu();
+        String uri = req.getRequestURI();
 
-            session.setAttribute("menu", menu);
+        if (uri.startsWith("/")) {
+            uri = uri.substring(1);
         }
 
-        if (page == null || "menumain".equals(req.getParameter("action"))) {
-            page = new ForumOverview();
-        } else if ("diagnostics".equals(req.getParameter("action"))) {
-            page = new Diagnostics();
-        } else if ("menulogin".equals(req.getParameter("action"))) {
-            page = new Login(page);
-        } else if ("menuregister".equals(req.getParameter("action"))) {
-            page = new Registration(page, page);
-        } else if ("menulogout".equals(req.getParameter("action"))) {
-            session.setAttribute("user", null);
-            page = new ForumOverview();
-        } else if ("showmembers".equals(req.getParameter("action"))) {
-            page = new MemberOverview();
+        String [] parts = uri.split("/");
+
+        // if parts[0] equals "", load basic page which will check #!/ and load content
+        if (parts.length < 2 && parts[0].length() == 0) {
+            resp.getWriter().print(basic);
         } else {
+            String rest = parts[0];
+
+            Class<? extends Page> pageClass = pageClassMapping.get(parts[0]);
+
+            if (pageClass == null) {
+                resp.setStatus(404);
+                return;
+            }
+
+            Class [] parameterTypes = new Class[parts.length-1];
+            for (int index = 0; index < parameterTypes.length; index++) {
+                parameterTypes[index] = String.class;
+            }
+
+            try {
+                Constructor<? extends Page> c = pageClass.getConstructor(parameterTypes);
+
+                String [] constructorParameters = new String[parts.length-1];
+
+                for (int index = 0; index < parameterTypes.length; index++) {
+                    constructorParameters[index] = parts[index+1];
+                }
+
+                page = c.newInstance(constructorParameters);
+            } catch (Exception e) {
+                throw new ServletException(e);
+            }
+
             final Page myPage = page;
+            page.setAction(req.getParameter("action"));
 
             Transaction<Page> t = new Transaction<Page>() {
                 @Override
@@ -122,24 +158,31 @@ public class ForumServlet extends HttpServlet {
             };
 
             page = t.getResult();
-        }
+            menu.processRequest(req);
 
-        menu.processRequest(req);
+            resp.getWriter().print(menu.render(req));
+            resp.getWriter().print(page.render(req));
 
-        session.setAttribute("page", page);
+            resp.getWriter().print("<script type=\"text/javascript\">");
+            resp.getWriter().print("window.location.hash = '#!/");
+            resp.getWriter().print(findPageLocation(page));
+            resp.getWriter().print("';</script>\n");
 
-        if (!ajax) {
-            resp.getWriter().print(head);
-        }
-
-        resp.getWriter().print(menu.render(req));
-        resp.getWriter().print(page.render(req));
-
-        if (!ajax) {
-            resp.getWriter().print(bottom);
         }
 
         System.out.println("Request ends, time="+ Util.formatNano(System.nanoTime() - nano) +", page="+page.getClass().getSimpleName());
+    }
+
+    protected String findPageLocation(Page page) {
+        String result = "";
+
+        for (Map.Entry<String, Class<? extends Page>> entry : pageClassMapping.entrySet()) {
+            if (entry.getValue().equals(page.getClass())) {
+                result = entry.getKey();
+            }
+        }
+
+        return result;
     }
 
 }

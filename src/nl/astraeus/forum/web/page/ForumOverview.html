@@ -25,7 +25,7 @@
         {if(member.superuser)}
         <td>{topic.id}</td>
         {endif}
-        <td><a onclick="submit('comment', '{topic.id}')">{topic.shortTitle}</a></td>
+        <td><a href="#!/topic/{topic.id}" onclick="ajax('topic/{topic.id}')">{topic.shortTitle}</a></td>
         <td>{topic.date}</td>
         {if(topic.creator)}
         <td>{topic.creator}</td>
@@ -37,8 +37,8 @@
         <td>{topic.lastPost}</td>
         {if(member.superuser)}
         <td>
-            <a class="btn btn-mini btn-primary" onclick="submit('edit', '{topic.id}')">edit</a></a>
-            <a class="btn btn-mini btn-primary" onclick="submit('remove', '{topic.id}')">remove</a></a>
+            <a class="btn btn-mini btn-primary" href="#!/topic/{topic.id}" onclick="ajax('topic/{topic.id}', 'edit')">edit</a></a>
+            <a class="btn btn-mini btn-primary" onclick="ajax('topic/{topic.id}', 'remove')">remove</a></a>
         </td>
         {endif}
     </tr>
@@ -59,5 +59,5 @@
 </div>
 
 {if(member.escapedNickName)}
-<a class="btn btn-primary" onclick="submit('new')">New topic</a>
+<a class="btn btn-primary" onclick="submit('topic', 'new')">New topic</a>
 {endif}

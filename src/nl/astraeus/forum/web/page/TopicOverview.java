@@ -13,7 +13,6 @@ import java.util.Map;
  */
 public class TopicOverview extends TemplatePage {
 
-    private Page previous;
     private long topicId;
     private Boolean editing = null;
     private String description = null;
@@ -21,9 +20,8 @@ public class TopicOverview extends TemplatePage {
 
     private TopicDao dao = new TopicDao();
 
-    public TopicOverview(Page previous, Topic topic) {
-        this.previous = previous;
-        this.topicId = topic.getId();
+    public TopicOverview(String topicId) {
+        this.topicId = Long.parseLong(topicId);
     }
 
     @Override
@@ -66,15 +64,11 @@ public class TopicOverview extends TemplatePage {
         } else if ("cancel".equals(request.getParameter("action"))) {
             editing = null;
         } else if ("edit".equals(request.getParameter("action"))) {
-            long id = Long.parseLong(request.getParameter("actionValue"));
-
-            result = new TopicEdit(this, dao.find(id));
+            result = new TopicEdit(this, dao.find(topicId));
         } else if ("remove".equals(request.getParameter("action"))) {
-            long id = Long.parseLong(request.getParameter("actionValue"));
-
-            dao.remove(id);
-        } else if ("back".equals(request.getParameter("action"))) {
-            result = previous;
+            dao.remove(topicId);
+        //} else if ("back".equals(request.getParameter("action"))) {
+        //    result = previous;
         }
         
         first = true;

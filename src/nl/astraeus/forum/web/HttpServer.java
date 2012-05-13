@@ -19,7 +19,7 @@ public class HttpServer {
         SimpleWebServer server = new SimpleWebServer(port);
 
         server.addServlet(new ResourceServlet(), "/resources/*");
-        server.addServlet(new ForumServlet(), "/");
+        server.addServlet(new ForumServlet(), "/*");
 
         server.start();
     }

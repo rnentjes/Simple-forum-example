@@ -14,34 +14,33 @@ import java.util.Map;
  */
 public class Login extends TemplatePage {
 
-    private Page previous;
     private MemberDao dao = new MemberDao();
-    
-    public Login(Page previous) {
-        this.previous = previous;   
+    private String action = null;
+
+    public Login() {}
+
+    public Login(String action) {
+        this.action = action;
     }
 
     @Override
     public Page processRequest(HttpServletRequest request) {
         Page result = this;
-        
-        if ("login".equals(request.getParameter("action"))) {
+
+        if (isAction("login")) {
             String nickName = request.getParameter("nickName");
             String password = request.getParameter("password");
-                    
-            Member member = dao.login(nickName, password);
 
-            if (member != null) {
-                request.getSession().setAttribute("user", member);
-                result = previous;
-            } else {
-                // warn
+            if (nickName != null && nickName.length() > 0) {
+                Member member = dao.login(nickName, password);
+
+                if (member != null) {
+                    request.getSession().setAttribute("user", member);
+                    result = new ForumOverview();
+                }
             }
-
-        } else if ("register".equals(request.getParameter("action"))) {
-            result = new Registration(this, previous);
         }
-        
+
         return result;
     }
 

@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: rnentjes
@@ -22,12 +25,26 @@ import java.io.IOException;
  */
 public class ForumServlet extends HttpServlet {
 
+    private String basic;
     private String head;
     private String bottom;
+
+    private Map<String, Class<? extends Page>> pageClassMapping = new HashMap<String, Class<? extends Page>>();
 
     @Override
     public void init() throws ServletException {
         super.init();
+
+        pageClassMapping.put("", ForumOverview.class);
+        pageClassMapping.put("overview", ForumOverview.class);
+        pageClassMapping.put("diagnostics", Diagnostics.class);
+        pageClassMapping.put("login", Login.class);
+        pageClassMapping.put("registration", Registration.class);
+        pageClassMapping.put("logout", ForumOverview.class);
+        pageClassMapping.put("members", MemberOverview.class);
+        pageClassMapping.put("topic", TopicOverview.class);
+        pageClassMapping.put("comment", TopicOverview.class);
+
 
         new Transaction() {
             @Override
@@ -63,6 +80,7 @@ public class ForumServlet extends HttpServlet {
         };
 
         try {
+            basic = IOUtils.toString(getClass().getResourceAsStream("basic.html"));
             head = IOUtils.toString(getClass().getResourceAsStream("head.html"));
             bottom = IOUtils.toString(getClass().getResourceAsStream("bottom.html"));
         } catch (IOException e) {
@@ -87,32 +105,59 @@ public class ForumServlet extends HttpServlet {
 
         resp.setContentType("text/html");
 
-        Page page = (Page)session.getAttribute("page");
-        Page menu = (Page)session.getAttribute("menu");
+        Page page = new ForumOverview();
+        Page menu = new Menu();
 
         session.setMaxInactiveInterval(1800);
 
-        if (menu == null) {
-            menu = new Menu();
+        String href = req.getParameter("href");
 
-            session.setAttribute("menu", menu);
+        if (href == null) {
+            href="";
         }
 
-        if (page == null || "menumain".equals(req.getParameter("action"))) {
-            page = new ForumOverview();
-        } else if ("diagnostics".equals(req.getParameter("action"))) {
-            page = new Diagnostics();
-        } else if ("menulogin".equals(req.getParameter("action"))) {
-            page = new Login(page);
-        } else if ("menuregister".equals(req.getParameter("action"))) {
-            page = new Registration(page, page);
-        } else if ("menulogout".equals(req.getParameter("action"))) {
-            session.setAttribute("user", null);
-            page = new ForumOverview();
-        } else if ("showmembers".equals(req.getParameter("action"))) {
-            page = new MemberOverview();
+        String [] parts = href.split("/");
+
+        // if parts[0] equals "", load basic page which will check #!/ and load content
+        if (parts.length < 2 && parts[0].length() == 0) {
+            resp.getWriter().print(head);
+            //resp.getWriter().print("<script type=\"text/javascript\">ajax('overview');</script>\n");
+            resp.getWriter().print(bottom);
         } else {
+            if (!ajax) {
+                resp.getWriter().print(head);
+            }
+
+            String rest = parts[0];
+
+            Class<? extends Page> pageClass = pageClassMapping.get(parts[0]);
+
+            if (pageClass == null) {
+                resp.setStatus(404);
+                return;
+            }
+
+            Class [] parameterTypes = new Class[parts.length-1];
+            for (int index = 0; index < parameterTypes.length; index++) {
+                parameterTypes[index] = String.class;
+            }
+
+            try {
+                Constructor<? extends Page> c = pageClass.getConstructor(parameterTypes);
+
+                String [] constructorParameters = new String[parts.length-1];
+
+                for (int index = 0; index < parameterTypes.length; index++) {
+                    constructorParameters[index] = parts[index+1];
+                }
+
+                page = c.newInstance(constructorParameters);
+            } catch (Exception e) {
+                throw new ServletException(e);
+            }
+
             final Page myPage = page;
+            page.setAction(req.getParameter("action"));
 
             Transaction<Page> t = new Transaction<Page>() {
                 @Override
@@ -122,24 +167,36 @@ public class ForumServlet extends HttpServlet {
             };
 
             page = t.getResult();
-        }
+            menu.processRequest(req);
 
-        menu.processRequest(req);
+            resp.getWriter().print(menu.render(req));
+            resp.getWriter().print(page.render(req));
 
-        session.setAttribute("page", page);
+            if (ajax) {
+                resp.getWriter().print("<script type=\"text/javascript\">");
+                resp.getWriter().print("window.location.hash = '#!/");
+                resp.getWriter().print(href);
+                resp.getWriter().print("';</script>\n");
+            }
 
-        if (!ajax) {
-            resp.getWriter().print(head);
-        }
-
-        resp.getWriter().print(menu.render(req));
-        resp.getWriter().print(page.render(req));
-
-        if (!ajax) {
-            resp.getWriter().print(bottom);
+            if (!ajax) {
+                resp.getWriter().print(bottom);
+            }
         }
 
         System.out.println("Request ends, time="+ Util.formatNano(System.nanoTime() - nano) +", page="+page.getClass().getSimpleName());
+    }
+
+    protected String findPageLocation(Page page) {
+        String result = "";
+
+        for (Map.Entry<String, Class<? extends Page>> entry : pageClassMapping.entrySet()) {
+            if (entry.getValue().equals(page.getClass())) {
+                result = entry.getKey();
+            }
+        }
+
+        return result;
     }
 
 }

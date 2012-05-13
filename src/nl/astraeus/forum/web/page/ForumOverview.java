@@ -21,6 +21,17 @@ public class ForumOverview extends TemplatePage {
     private int resultsPerPage = 15;
     private Boolean hasNext = false;
 
+    private long topicId;
+
+    public ForumOverview() {
+
+    }
+
+    public ForumOverview(String topicId) {
+        this.topicId = Long.parseLong(topicId);
+    }
+
+
     @Override
     public Page processRequest(HttpServletRequest request) {
         Page result = this;
@@ -29,16 +40,6 @@ public class ForumOverview extends TemplatePage {
             Member member = (Member)request.getSession().getAttribute("user");
 
             result = new TopicEdit(this, new Topic(member));
-        } else if ("comment".equals(request.getParameter("action"))) {
-            long id = Long.parseLong(request.getParameter("actionValue"));
-
-            Topic topic = dao.find(id);
-            
-            topic.addView();
-            
-            dao.store(topic);
-
-            result = new TopicOverview(this, topic);
         } else if ("previous".equals(request.getParameter("action"))) {
             if (page > 1) {
                 page--;
@@ -47,14 +48,12 @@ public class ForumOverview extends TemplatePage {
             if (page < getNumberOfPages()) {
                 page++;
             }
-        } else if ("edit".equals(request.getParameter("action"))) {
+        } else if (isAction("edit")) {
             long id = Long.parseLong(request.getParameter("actionValue"));
 
             result = new TopicEdit(this, dao.find(id));
-        } else if ("remove".equals(request.getParameter("action"))) {
-            long id = Long.parseLong(request.getParameter("actionValue"));
-
-            Topic topic = dao.find(id);
+        } else if (isAction("remove")) {
+            Topic topic = dao.find(topicId);
 
             CommentDao commentDao = new CommentDao();
 
@@ -62,7 +61,7 @@ public class ForumOverview extends TemplatePage {
                 commentDao.remove(comment);
             }
 
-            dao.remove(id);
+            dao.remove(topicId);
         }
 
         return result;

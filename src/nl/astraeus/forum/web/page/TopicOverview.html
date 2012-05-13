@@ -3,7 +3,7 @@
     {eachfirst}
     <div class="row-fluid">
         <div class="span2">
-            <a class="btn btn-mini" onclick="submit('back')">Back</a>
+            <a class="btn btn-mini" onclick="history.back()">Back</a>
         </div>
 
         <div class="span8 offset2"><h3>{topic.shortTitle}</h3></div>
@@ -85,9 +85,9 @@
 {else}
     <div class="row-fluid">
         <div class="span2">
-            <a class="btn " onclick="submit('back')">Back</a>
+            <a class="btn " onclick="history.back()">Back</a>
             {if(member.nickName)}
-            <a class="btn btn-primary" onclick="submit('comment', '{topic.id}')">Comment</a>
+            <a class="btn btn-primary" onclick="submit('comment')">Comment</a>
             {endif}
         </div>
     </div>

@@ -10,8 +10,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="resources/css/bootstrap.css" rel="stylesheet">
+    <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
 
     <style type="text/css">
         html, body {
@@ -55,17 +55,16 @@
         }
     </style>
 
-    <script type="text/javascript" src="/resources/js/jquery.js"></script>
+    <script type="text/javascript" src="resources/js/jquery.js"></script>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="/resources/js/html5.js"></script>
+    <script type="text/javascript" src="resources/js/html5.js"></script>
     <![endif]-->
 
     <script type="text/javascript">
-        // submit parameters to the current url
         function submit(action, actionValue) {
-            var params = 'ajax=true&action=' + encodeURI(action) + '&actionValue=' + encodeURI(actionValue) + '&' + $("#form").serialize();
+            var params = 'ajax=true&action=' + action + '&' + $("#form").serialize();
 
             if(document.selection && document.selection.empty) {
                 document.selection.empty();
@@ -87,9 +86,8 @@
             return false;
         }
 
-        // move to a new url
         function ajax(href, action, actionValue) {
-            var params = 'ajax=true&href=' + encodeURI(href) + '&action=' + encodeURI(action) + '&actionValue=' + encodeURI(actionValue) + '&' + $("#form").serialize();
+            var params = 'ajax=true&action=' + action + '&actionValue=' + actionValue + '&' + $("#form").serialize();
 
             if(document.selection && document.selection.empty) {
                 document.selection.empty();
@@ -98,41 +96,24 @@
                 sel.removeAllRanges();
             }
 
-            followHash = false;
             $("#loading").show();
-            $.post("?ts="+new Date().getMilliseconds(), params, function(data) {
+            $.post(href+"?ts="+new Date().getMilliseconds(), params, function(data) {
                 $("#content").html(data);
                 $("#loading").hide();
-                followHash = true;
             }, "html")
                     .error(function(data) {
                         $("#content").html(data.responseText);
                         $("#loading").hide();
-                        followHash = true;
                     });
 
             return false;
         }
-
-        var followHash = false;
-        var currentHash = '';
 
         if (window.location.hash && window.location.hash.indexOf("#!/") == 0) {
             ajax(window.location.hash.substring(3));
         } else if (window.location.pathname === '/') { // if no uri...
             ajax('overview');
         }
-
-        function checkHash() {
-            if (followHash && window.location.hash != currentHash && window.location.hash.indexOf("#!/") == 0) {
-                currentHash = window.location.hash;
-                ajax(window.location.hash.substring(3));
-            }
-
-            setTimeout(checkHash, 25);
-        }
-
-        checkHash();
     </script>
 
 </head>
@@ -141,3 +122,14 @@
 <form name="form" id="form" action="/" method="post" class="form-horizontal">
 
     <div class="container" id="content">
+
+    </div>
+
+</form>
+
+<script type="text/javascript" src="resources/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap-collapse.js"></script>
+
+</body>
+</html>

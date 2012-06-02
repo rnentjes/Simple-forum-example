@@ -1,29 +1,32 @@
 <?xml version="1.0"?>
-<project name="Simple servlet runner" default="all" basedir=".">
+<project name="Simple forum example" default="all" basedir=".">
     <property file="build.properties"/>
     <property file="default.build.properties"/>
     <property file="default.properties"/>
 
-    <path id="project.class.path" >
+    <path id="libraries" >
         <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/jetty">
             <include name="*.jar"/>
         </fileset>
     </path>
 
+    <path id="project.class.path" >
+        <pathelement refid="libraries" />
+    </path>
+
     <path id="build.class.path">
         <pathelement location="${build.classes.dir}"/>
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
+        <pathelement id="libraries" />
         <fileset dir="${build.lib.dir}">
             <include name="**/*.jar"/>
         </fileset>
     </path>
 
     <path id="aux.class.path">
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
+        <pathelement refid="libraries" />
     </path>
 
     <path id="findbugs.class.path">
@@ -36,9 +39,7 @@
     <path id="test.class.path">
         <pathelement location="${build.classes.dir}"/>
         <pathelement location="${test.classes.dir}"/>
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
+        <pathelement refid="libraries" />
         <fileset dir="${build.lib.dir}">
             <include name="junit/**/*.jar"/>
         </fileset>
@@ -47,9 +48,7 @@
     <path id="junit.class.path">
         <pathelement location="${build.classes.dir}"/>
         <pathelement location="${test.classes.dir}"/>
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
+        <pathelement refid="libraries" />
         <fileset dir="${build.lib.dir}">
             <include name="**/*.jar"/>
         </fileset>
@@ -57,16 +56,12 @@
 
     <path id="run.class.path">
         <pathelement location="${build.classes.dir}"/>
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
+        <pathelement refid="libraries" />
     </path>
 
     <path id="cobertura.class.path">
         <pathelement location="${test.classes.dir}"/>
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
+        <pathelement refid="libraries" />
         <fileset dir="${build.lib.dir}/junit">
             <include name="**/*.jar"/>
         </fileset>

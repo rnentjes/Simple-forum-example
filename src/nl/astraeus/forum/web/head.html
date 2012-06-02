@@ -103,11 +103,15 @@
             $.post("?ts="+new Date().getMilliseconds(), params, function(data) {
                 $("#content").html(data);
                 $("#loading").hide();
+                console.log('L-hash: ', window.location.hash);
+                console.log('L-currentHash: ', currentHash);
+                currentHash = window.location.hash;
                 followHash = true;
             }, "html")
                     .error(function(data) {
                         $("#content").html(data.responseText);
                         $("#loading").hide();
+                        currentHash = window.location.hash;
                         followHash = true;
                     });
 
@@ -125,6 +129,9 @@
 
         function checkHash() {
             if (followHash && window.location.hash != currentHash && window.location.hash.indexOf("#!/") == 0) {
+                console.log('hash: ', window.location.hash);
+                console.log('currentHash: ', currentHash);
+
                 currentHash = window.location.hash;
                 ajax(window.location.hash.substring(3));
             }

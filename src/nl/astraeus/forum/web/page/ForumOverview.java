@@ -21,16 +21,13 @@ public class ForumOverview extends TemplatePage {
     private int resultsPerPage = 15;
     private Boolean hasNext = false;
 
-    private long topicId;
-
     public ForumOverview() {
 
     }
 
-    public ForumOverview(String topicId) {
-        this.topicId = Long.parseLong(topicId);
+    public ForumOverview(String page) {
+        this.page = Integer.parseInt(page);
     }
-
 
     @Override
     public Page processRequest(HttpServletRequest request) {
@@ -53,6 +50,8 @@ public class ForumOverview extends TemplatePage {
 
             result = new TopicEdit(this, dao.find(id));
         } else if (isAction("remove")) {
+            long topicId = Long.parseLong(request.getParameter("actionValue"));
+
             Topic topic = dao.find(topicId);
 
             CommentDao commentDao = new CommentDao();
@@ -88,14 +87,30 @@ public class ForumOverview extends TemplatePage {
 
         result.put("topics", topics);
 
-        if (topics.size() == resultsPerPage) {
-            hasNext = true;
-        } else {
-            hasNext = false;
-        }
+        hasNext = (topics.size() == resultsPerPage);
 
         result.put("member", request.getSession().getAttribute("user"));
         result.put("controller", this);
+
+        return result;
+    }
+
+    public Integer getPreviousPageNumber() {
+        Integer result = null;
+
+        if (getHasPrevious()) {
+            result = page - 1;
+        }
+
+        return result;
+    }
+
+    public Integer getNextPageNumber() {
+        Integer result = null;
+
+        if (getHasNext()) {
+            result = page + 1;
+        }
 
         return result;
     }

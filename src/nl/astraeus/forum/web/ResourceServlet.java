@@ -39,6 +39,8 @@ public class ResourceServlet extends HttpServlet {
                     resp.setContentType("image/gif");
                 }
 
+                resp.addHeader("Cache-Control", "max-age=3600");
+
                 IOUtils.copy(in, resp.getOutputStream());
             } finally {
                 in.close();

@@ -21,7 +21,11 @@ public class TopicOverview extends TemplatePage {
     private TopicDao dao = new TopicDao();
 
     public TopicOverview(String topicId) {
-        this.topicId = Long.parseLong(topicId);
+        if ("new".equals(topicId)) {
+            this.topicId = -1;
+        } else {
+            this.topicId = Long.parseLong(topicId);
+        }
     }
 
     @Override

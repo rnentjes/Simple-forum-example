@@ -110,7 +110,13 @@ public class ForumServlet extends HttpServlet {
 
         session.setMaxInactiveInterval(1800);
 
-        String href = req.getParameter("href");
+        String uri = req.getRequestURI();
+
+        if (uri.startsWith("/")) {
+            uri = uri.substring(1);
+        }
+
+        String href = uri; //req.getParameter("href");
 
         if (href == null) {
             href="";
@@ -119,9 +125,14 @@ public class ForumServlet extends HttpServlet {
         String [] parts = href.split("/");
 
         // if parts[0] equals "", load basic page which will check #!/ and load content
-        if (parts.length < 2 && parts[0].length() == 0) {
+        if (parts.length == 0 || parts[0].length() == 0) {
             resp.getWriter().print(head);
             //resp.getWriter().print("<script type=\"text/javascript\">ajax('overview');</script>\n");
+
+            Page m = new Menu();
+            Page p = new ForumOverview();
+            resp.getWriter().print(menu.render(req));
+            resp.getWriter().print(p.render(req));
             resp.getWriter().print(bottom);
         } else {
             if (!ajax) {

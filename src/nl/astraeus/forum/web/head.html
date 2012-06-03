@@ -64,7 +64,7 @@
 
     <script type="text/javascript">
         // submit parameters to the current url
-        function submit(action, actionValue) {
+        function submitx(action, actionValue) {
             var params = 'ajax=true&action=' + encodeURI(action) + '&actionValue=' + encodeURI(actionValue) + '&' + $("#form").serialize();
 
             if(document.selection && document.selection.empty) {
@@ -75,7 +75,8 @@
             }
 
             $("#loading").show();
-            $.post("?ts="+new Date().getMilliseconds(), params, function(data) {
+            console.log(window.location.pathname);
+            $.post(window.location.pathname + "?ts=" + new Date().getMilliseconds(), params, function(data) {
                 $("#content").html(data);
                 $("#loading").hide();
             }, "html")
@@ -98,26 +99,27 @@
                 sel.removeAllRanges();
             }
 
-            followHash = false;
+//            followHash = false;
             $("#loading").show();
-            $.post("?ts="+new Date().getMilliseconds(), params, function(data) {
+            $.post(window.location.pathname+ "?ts=" + new Date().getMilliseconds(), params, function(data) {
                 $("#content").html(data);
                 $("#loading").hide();
-                console.log('L-hash: ', window.location.hash);
-                console.log('L-currentHash: ', currentHash);
-                currentHash = window.location.hash;
-                followHash = true;
+//                console.log('L-hash: ', window.location.hash);
+//                console.log('L-currentHash: ', currentHash);
+//                currentHash = window.location.hash;
+//                followHash = true;
             }, "html")
                     .error(function(data) {
                         $("#content").html(data.responseText);
                         $("#loading").hide();
-                        currentHash = window.location.hash;
-                        followHash = true;
+//                        currentHash = window.location.hash;
+//                        followHash = true;
                     });
 
             return false;
         }
 
+        /*
         var followHash = false;
         var currentHash = '';
 
@@ -140,6 +142,7 @@
         }
 
         checkHash();
+        */
     </script>
 
 </head>

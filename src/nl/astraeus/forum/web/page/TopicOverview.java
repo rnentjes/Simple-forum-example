@@ -21,11 +21,20 @@ public class TopicOverview extends TemplatePage {
     private TopicDao dao = new TopicDao();
 
     public TopicOverview(String topicId) {
-        if ("new".equals(topicId)) {
-            this.topicId = -1;
-        } else {
-            this.topicId = Long.parseLong(topicId);
+        this.topicId = Long.parseLong(topicId);
+    }
+
+    public TopicOverview(String topicId, String nw) {
+        this.topicId = Long.parseLong(topicId);
+
+        if ("new".equals(nw)) {
+            editing = true;
+            description = "";
         }
+    }
+
+    protected TopicOverview() {
+        super();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override

@@ -12,7 +12,7 @@
                     <li class=""><a href="/overview" >Forum</a></li>
                 </ul>
 
-                {if(user.superuser)}
+                ${if(user.superuser)}
                 <ul class="nav">
                     <li class="dropdown">
                         <a href="#"
@@ -23,19 +23,19 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class=""><a href="/diagnostics"  >Diagnostics</a></li> <!-- onclick="return ajax('diagnostics');" -->
-                            <li class=""><a href="/members" onclick="return ajax('members');">Show members</a></li>
+                            <li class=""><a href="/members" >Show members</a></li>
                         </ul>
                     </li>
                 </ul>
-                {endif}
+                ${/if}
 
                 <ul class="nav pull-right">
-                    {if(user.nickName)}
-                    <li class=""><a href="" onclick="submit('menulogout');">Logout {user.nickName}</a></li>
-                    {else}
+                    ${if(user.nickName)}
+                    <li class=""><a href="" onclick="submit('menulogout');">Logout ${user.nickName}</a></li>
+                    ${else}
                     <li class=""><a href="/login" >Login</a></li>
                     <li><a href="/register" onclick="ajax('register');">Register</a></li>
-                    {endif}
+                    ${/if}
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

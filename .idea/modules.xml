@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Simple-forum-example.iml" filepath="$PROJECT_DIR$/Simple-forum-example.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Simple-persistence/Simple-persistence.iml" filepath="$PROJECT_DIR$/../Simple-persistence/Simple-persistence.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Simple-servlet-runner/Simple-servlet-runner.iml" filepath="$PROJECT_DIR$/../Simple-servlet-runner/Simple-servlet-runner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Very-simple-templates/Very-simple-templates.iml" filepath="$PROJECT_DIR$/../Very-simple-templates/Very-simple-templates.iml" />
     </modules>
   </component>
 </project>

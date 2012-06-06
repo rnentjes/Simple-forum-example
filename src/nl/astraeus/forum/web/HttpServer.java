@@ -21,7 +21,8 @@ public class HttpServer {
             port = Integer.parseInt(args[0]);
         }
 
-        startJetty(port);
+        startSimpleServer(port);
+        startJetty(port+1);
     }
 
     public static void startSimpleServer(int port) {

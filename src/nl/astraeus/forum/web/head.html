@@ -119,7 +119,58 @@
             return false;
         }
 
-        /*
+        Sfe = function() {
+
+            function submit(uri, action, actionValue) {
+                $('#form').attr('action', uri);
+
+                // if pushstate is supported, make ajax call
+                if (false) {
+                    var params = 'action=' + encodeURIComponent(action) + '&actionValue=' + encodeURIComponent(actionValue) + '&' + $("#form").serialize();
+
+                    if(document.selection && document.selection.empty) {
+                        document.selection.empty();
+                    } else if(window.getSelection) {
+                        var sel = window.getSelection();
+                        sel.removeAllRanges();
+                    }
+
+                    $("#loading").show();
+                    $.post("?ts="+new Date().getMilliseconds(), params, function(data) {
+                        $("#content").html(data);
+                        $("#loading").hide();
+                    }, "html")
+                            .error(function(data) {
+                                $("#content").html(data.responseText);
+                                $("#loading").hide();
+                            });
+
+                    return false;
+                } else {
+                    // add hidden inputs to form
+                    $('#form').append('<input type="hidden" name="action" value="'+action+'" />"');
+                    $('#form').append('<input type="hidden" name="actionValue" value="'+actionValue+'" />"');
+
+                    $('#form').submit();
+                }
+            }
+
+            return {
+                submit: function(uri, action, actionValue) {
+                    return submit_ajax(uri, action, actionValue);
+                },
+
+                log: function(p1,p2,p3,p4,p5) {
+                    if (console.log) {
+                        console.log(p1,p2,p3,p4,p5);
+                    }
+                }
+
+            };
+
+        }();
+
+    /*
         var followHash = false;
         var currentHash = '';
 

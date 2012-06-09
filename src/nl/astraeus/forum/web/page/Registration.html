@@ -1,11 +1,11 @@
-{if(warnings)}
-  {foreach(warnings as warn}
+${if(warnings)}
+  ${each(warnings as warn}
     <div class="alert">
       <a class="close" data-dismiss="alert">×</a>
-      <strong>Warning!</strong> {warn}
+      <strong>Warning!</strong> ${warn}
     </div>
-  {eachfor}
-{endif}
+  ${/each}
+${/if}
 
 <fieldset>
     <legend>Registration</legend>

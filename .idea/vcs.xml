@@ -4,6 +4,7 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Simple-persistence" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Simple-servlet-runner" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Very-simple-templates" vcs="Git" />
   </component>
 </project>
 

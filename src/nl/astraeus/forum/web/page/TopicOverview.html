@@ -1,74 +1,76 @@
 <div class="container-fluid">
-    {foreach(topic.comments as comment)}
-    {eachfirst}
+    ${each(topic.comments as comment)}
+    ${eachfirst}
     <div class="row-fluid">
         <div class="span2">
             <a class="btn btn-mini" onclick="history.back()">Back</a>
         </div>
 
-        <div class="span8 offset2"><h3>{topic.shortTitle}</h3></div>
+        <div class="span8 offset2"><h3>${topic.shortTitle}</h3></div>
     </div>
 
     <div class="row-fluid">
         <div class="span3 well"> <!-- alert alert-info -->
-            {if(comment.creator.nickName)}
-            {comment.creator.nickName}
-            {else}
+            ${if(comment.creator.nickName)}
+            ${comment.creator.nickName}
+            ${else}
             anonymous
-            {endif}
+            ${/if}
             <br/>
             <br/>
 
-            {if(comment.creator.nickName)}
+            ${if(comment.creator.nickName)}
             <table>
-                <tr><td>Joined:</td><td>{comment.creator.memberSince}</td></tr>
-                <tr><td>Topics:</td><td>{comment.creator.numberOfTopics}</td></tr>
-                <tr><td>Comments:</td><td>{comment.creator.numberOfComments}</td></tr>
+                <tr><td>Joined:</td><td>${comment.creator.memberSince}</td></tr>
+                <tr><td>Topics:</td><td>${comment.creator.numberOfTopics}</td></tr>
+                <tr><td>Comments:</td><td>${comment.creator.numberOfComments}</td></tr>
             </table>
-            {endif}
+            ${/if}
             <!--Sidebar content-->
         </div>
         <div class="span7 offset3 well " >
-            {escape(html|br)}
-            {if(comment)}{comment.description}{endif}
-            {escapeend}
+            ${escape(html|br)}
+            ${if(comment)}${comment.description}${/if}
+            ${/escape}
         </div>
     </div>
     <div class="row-fluid">
         &nbsp;
     </div>
-    {eachmain}
+    ${eachmain}
     <div class="row-fluid">
         <div class="span3 well"> <!-- alert alert-info -->
-            {if(comment.creator.nickName)}
-            {comment.creator.nickName}
-            {else}
+            ${if(comment.creator.nickName)}
+            ${comment.creator.nickName}
+            ${else}
             anonymous
-            {endif}
+            ${/if}
             <br/>
             <br/>
 
-            {if(comment.creator.nickName)}
+            ${if(comment.creator.nickName)}
             <table>
-                <tr><td>Joined:</td><td>{comment.creator.memberSince}</td></tr>
-                <tr><td>Topics:</td><td>{comment.creator.numberOfTopics}</td></tr>
-                <tr><td>Comments:</td><td>{comment.creator.numberOfComments}</td></tr>
+                <tr><td>Joined:</td><td>${comment.creator.memberSince}</td></tr>
+                <tr><td>Topics:</td><td>${comment.creator.numberOfTopics}</td></tr>
+                <tr><td>Comments:</td><td>${comment.creator.numberOfComments}</td></tr>
             </table>
-            {endif}
+            ${/if}
             <!--Sidebar content-->
         </div>
         <div class="span7 offset3 well " >
-            {escape(html|br)}
-            {if(comment)}{comment.description}{endif}
-            {escapeend}
+            ${escape(html|br)}
+            ${if(comment)}${comment.description}${/if}
+            ${/escape}
         </div>
     </div>
-    {eachend}
+    ${/each}
 
-{if(editing)}
+    <a name="last" />
+    ${if(editing)}
+
     <div class="row-fluid">
         <div class="controls span11">
-            <textarea id="input02" name="description" style="width: 100%; height: 200px;">{description}</textarea>
+            <textarea id="input02" name="description" style="width: 100%; height: 200px;">${description}</textarea>
         </div>
     </div>
 
@@ -78,20 +80,21 @@
 
     <div class="row-fluid">
         <div class="span2">
-            <a class="btn btn-primary" onclick="submit('save')">Save</a>
-            <a class="btn" onclick="submit('cancel')">Cancel</a>
+            <input type="submit" name="action" value="save" class="btn btn-primary" />
+            <a class="btn btn-primary" href="/topic/${topic.id}#last" onclick="submit('save')">Save</a>
+            <a class="btn" onclick="submitx('cancel')">Cancel</a>
         </div>
     </div>
-{else}
+    ${else}
     <div class="row-fluid">
         <div class="span2">
-            <a class="btn " onclick="history.back()">Back</a>
-            {if(member.nickName)}
-            <a class="btn btn-primary" onclick="submit('comment')">Comment</a>
-            {endif}
+            <a class="btn " href="/overview">Back</a>
+            ${if(member.nickName)}
+            <a class="btn btn-primary" href="/topic/${topic.id}/new#last" >Comment</a>
+            ${/if}
         </div>
     </div>
-{endif}
+    ${/if}
 
 </div>
 <br/>

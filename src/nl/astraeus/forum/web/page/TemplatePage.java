@@ -37,7 +37,7 @@ public abstract class TemplatePage extends Page {
             try {
                 in = cls.getResourceAsStream(cls.getSimpleName() + ".html");
 
-                result = SimpleTemplate.readTemplate('{','}', EscapeMode.HTML, in);
+                result = SimpleTemplate.readTemplate("${","}", EscapeMode.HTML, in);
 
                 templateCache.put(cls, result);
             } catch (IOException e) {

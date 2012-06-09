@@ -12,7 +12,7 @@
                     <li class=""><a href="/overview" >Forum</a></li>
                 </ul>
 
-                {if(user.superuser)}
+                ${if(user.superuser)}
                 <ul class="nav">
                     <li class="dropdown">
                         <a href="#"
@@ -27,15 +27,15 @@
                         </ul>
                     </li>
                 </ul>
-                {endif}
+                ${/if}
 
                 <ul class="nav pull-right">
-                    {if(user.nickName)}
-                    <li class=""><a href="" onclick="submit('menulogout');">Logout {user.nickName}</a></li>
-                    {else}
+                    ${if(user.nickName)}
+                    <li class=""><a href="" onclick="submit('menulogout');">Logout ${user.nickName}</a></li>
+                    ${else}
                     <li class=""><a href="/login" >Login</a></li>
                     <li><a href="/register" onclick="ajax('register');">Register</a></li>
-                    {endif}
+                    ${/if}
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

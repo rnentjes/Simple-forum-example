@@ -19,7 +19,7 @@
 
     <path id="build.class.path">
         <pathelement location="${build.classes.dir}"/>
-        <pathelement id="libraries" />
+        <pathelement refid="libraries" />
         <fileset dir="${build.lib.dir}">
             <include name="**/*.jar"/>
         </fileset>

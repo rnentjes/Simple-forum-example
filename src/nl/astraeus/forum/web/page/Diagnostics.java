@@ -22,9 +22,15 @@ public class Diagnostics extends TemplatePage {
     private LoremIpsum loremIpsum = new LoremIpsum();
     private Random random = new Random(System.nanoTime());
 
+
+
+
+
     @Override
     public Page processRequest(HttpServletRequest request) {
         Page result = this;
+
+        authorize(request.getSession().getAttribute("user") != null);
 
         if ("gc".equals(request.getParameter("action"))) {
             System.gc();

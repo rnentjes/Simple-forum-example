@@ -121,6 +121,27 @@
 
         Sfe = function() {
 
+            function getBody(uri) {
+                if(document.selection && document.selection.empty) {
+                    document.selection.empty();
+                } else if(window.getSelection) {
+                    var sel = window.getSelection();
+                    sel.removeAllRanges();
+                }
+
+                $("#loading").show();
+                $.get(uri, "", function(data) {
+                    $("#content").html(data);
+                    $("#loading").hide();
+                }, "html-body")
+                        .error(function(data) {
+                            $("#content").html(data.responseText);
+                            $("#loading").hide();
+                        });
+
+                return false;
+            }
+
             function submit(uri, action, actionValue) {
                 $('#form').attr('action', uri);
 
@@ -199,6 +220,5 @@
 </head>
 <body>
 <div id="loading"></div>
-<form name="form" id="form" method="post" class="form-horizontal">
 
     <div class="container" id="content">

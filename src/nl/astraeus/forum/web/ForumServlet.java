@@ -4,6 +4,7 @@ import nl.astraeus.forum.model.Member;
 import nl.astraeus.forum.model.MemberDao;
 import nl.astraeus.forum.util.IOUtils;
 import nl.astraeus.forum.web.page.*;
+import nl.astraeus.http.HttpMethod;
 import nl.astraeus.persistence.SimpleStore;
 import nl.astraeus.persistence.Transaction;
 import nl.astraeus.util.Util;
@@ -91,15 +92,9 @@ public class ForumServlet extends HttpServlet {
         System.setProperty(SimpleStore.SAFEMODE, String.valueOf(true));
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
-    }
-
-    @Override
-    protected void doPost(final HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void handle(final HttpServletRequest req, HttpServletResponse resp, final HttpMethod method) throws ServletException, IOException {
         long nano = System.nanoTime();
-        
+
         HttpSession session =  req.getSession();
         boolean ajax = "true".equals(req.getParameter("ajax"));
 
@@ -124,21 +119,16 @@ public class ForumServlet extends HttpServlet {
 
         String [] parts = href.split("/");
 
-        // if parts[0] equals "", load basic page which will check #!/ and load content
         if (parts.length == 0 || parts[0].length() == 0) {
             resp.getWriter().print(head);
-            //resp.getWriter().print("<script type=\"text/javascript\">ajax('overview');</script>\n");
 
             Page m = new Menu();
             Page p = new ForumOverview();
+
             resp.getWriter().print(menu.render(req));
             resp.getWriter().print(p.render(req));
             resp.getWriter().print(bottom);
         } else {
-            if (!ajax) {
-                resp.getWriter().print(head);
-            }
-
             String rest = parts[0];
 
             Class<? extends Page> pageClass = pageClassMapping.get(parts[0]);
@@ -173,24 +163,44 @@ public class ForumServlet extends HttpServlet {
             Transaction<Page> t = new Transaction<Page>() {
                 @Override
                 public void execute() {
-                    setResult(myPage.processRequest(req));
+                    if (method == HttpMethod.PUT) {
+                        myPage.put(req);
+                    } else if (method == HttpMethod.POST) {
+                        String method = req.getParameter("method");
+
+                        if ("put".equalsIgnoreCase(method)) {
+                            myPage.put(req);
+                        } else if ("delete".equalsIgnoreCase(method)) {
+                            myPage.delete(req);
+                        } else {
+                            myPage.post(req);
+                        }
+                    } else if (method == HttpMethod.DELETE) {
+                        myPage.delete(req);
+                    } else {
+                        setResult(myPage.processRequest(req));
+                    }
                 }
             };
 
-            page = t.getResult();
-            menu.processRequest(req);
-
-            resp.getWriter().print(menu.render(req));
-            resp.getWriter().print(page.render(req));
-
-            if (ajax) {
-                resp.getWriter().print("<script type=\"text/javascript\">");
-                resp.getWriter().print("window.location.hash = '#!/");
-                resp.getWriter().print(href);
-                resp.getWriter().print("';</script>\n");
+            if (t.getResult() != null) {
+                page = t.getResult();
+            } else {
+                page = myPage;
             }
 
-            if (!ajax) {
+            if (page.getRedirect() != null) {
+                resp.sendRedirect(page.getRedirect());
+            } else if (page.getResponseCode() != 200) {
+                resp.sendError(page.getResponseCode());
+            } else {
+                resp.getWriter().print(head);
+                resp.getWriter().print(menu.render(req));
+                Warnings warnings = Warnings.get(req);
+                if (warnings.hasWarnings()) {
+                    resp.getWriter().print(warnings.render(req));
+                }
+                resp.getWriter().print(page.render(req));
                 resp.getWriter().print(bottom);
             }
         }
@@ -198,16 +208,24 @@ public class ForumServlet extends HttpServlet {
         System.out.println("Request ends, time="+ Util.formatNano(System.nanoTime() - nano) +", page="+page.getClass().getSimpleName());
     }
 
-    protected String findPageLocation(Page page) {
-        String result = "";
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        handle(req, resp, HttpMethod.GET);
+    }
 
-        for (Map.Entry<String, Class<? extends Page>> entry : pageClassMapping.entrySet()) {
-            if (entry.getValue().equals(page.getClass())) {
-                result = entry.getKey();
-            }
-        }
+    @Override
+    protected void doPost(final HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        handle(req, resp, HttpMethod.POST);
+    }
 
-        return result;
+    @Override
+    protected void doPut(final HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        handle(req, resp, HttpMethod.PUT);
+    }
+
+    @Override
+    protected void doDelete(final HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        handle(req, resp, HttpMethod.DELETE);
     }
 
 }

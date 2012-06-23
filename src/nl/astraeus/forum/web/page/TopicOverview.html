@@ -1,4 +1,7 @@
-<div class="container-fluid">
+<form action="/topic/${topic.id}/new#last" method="post">
+    <input type="hidden" name="method" value="put" />
+
+  <div class="container-fluid">
     ${each(topic.comments as comment)}
     ${eachfirst}
     <div class="row-fluid">
@@ -80,9 +83,8 @@
 
     <div class="row-fluid">
         <div class="span2">
-            <input type="submit" name="action" value="save" class="btn btn-primary" />
-            <a class="btn btn-primary" href="/topic/${topic.id}#last" onclick="submit('save')">Save</a>
-            <a class="btn" onclick="submitx('cancel')">Cancel</a>
+            <button type="submit" name="action" class="btn btn-primary" >Save</button>
+            <a class="btn" href="/topic/${topic.id}" >Cancel</a>
         </div>
     </div>
     ${else}
@@ -100,3 +102,4 @@
 <br/>
 <br/>
 <br/>
+</form>

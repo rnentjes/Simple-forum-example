@@ -38,6 +38,36 @@ public class TopicOverview extends TemplatePage {
     }
 
     @Override
+    public void put(HttpServletRequest request) {
+        String description = request.getParameter("description");
+
+        if (description != null && description.length() != 0) {
+            Topic topic = dao.find(topicId);
+
+            Member member = (Member)request.getSession().getAttribute("user");
+            Comment comment = new Comment(member, request.getParameter("description"));
+
+            CommentDao dao = new CommentDao();
+
+            dao.store(comment);
+
+            topic.addComment(comment);
+
+            if (member != null) {
+                MemberDao memberDao = new MemberDao();
+
+                member.addComment(comment);
+
+                memberDao.store(member);
+            }
+
+            dao.store(topic);
+
+            redirect("/topic/"+topic.getId());
+        }
+    }
+
+    @Override
     public Page processRequest(HttpServletRequest request) {
         Page result = this;
 
@@ -73,6 +103,8 @@ public class TopicOverview extends TemplatePage {
                 }
 
                 dao.store(topic);
+
+                //moveToPage("/topic/"+topic.getId());
             }
         } else if ("cancel".equals(request.getParameter("action"))) {
             editing = null;

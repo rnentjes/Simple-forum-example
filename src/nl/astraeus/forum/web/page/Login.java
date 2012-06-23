@@ -24,24 +24,28 @@ public class Login extends TemplatePage {
     }
 
     @Override
-    public Page processRequest(HttpServletRequest request) {
-        Page result = this;
+    public void post(HttpServletRequest request) {
+        String nickName = request.getParameter("nickName");
+        String password = request.getParameter("password");
 
-        if (isAction("login")) {
-            String nickName = request.getParameter("nickName");
-            String password = request.getParameter("password");
+        if (nickName != null && nickName.length() > 0) {
+            Member member = dao.login(nickName, password);
 
-            if (nickName != null && nickName.length() > 0) {
-                Member member = dao.login(nickName, password);
+            if (member != null) {
+                request.getSession().setAttribute("user", member);
 
-                if (member != null) {
-                    request.getSession().setAttribute("user", member);
-                    result = new ForumOverview();
-                }
+                redirect("/overview");
+            } else {
+                Warnings.get(request).addMessage(Warnings.Message.Type.ERROR, "Login failed!", "Username and password combination was not found.");
             }
+        } else {
+            Warnings.get(request).addMessage(Warnings.Message.Type.ERROR, "Login failed!", "Username and password combination was not found.");
         }
+    }
 
-        return result;
+    @Override
+    public Page processRequest(HttpServletRequest request) {
+        return this;
     }
 
     @Override

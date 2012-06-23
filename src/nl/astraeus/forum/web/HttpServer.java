@@ -31,6 +31,9 @@ public class HttpServer {
         server.addServlet(new ResourceServlet(), "/resources/*");
         server.addServlet(new ForumServlet(), "/*");
 
+        server.setNumberOfConnections(10);
+        server.setSupportKeelAlive(true);
+
         server.start();
     }
 

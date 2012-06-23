@@ -1,8 +1,7 @@
 This is a simple forum to demonstrate some of the other projects:
 
 
-* [Prevayler Reference](https://github.com/rnentjes/Prevayler-Reference) - For simple memory persistence
-* [Simple web](https://github.com/rnentjes/Simple-web) - Simple dynamic web pages (todo, see source)
+* [Prevayler Reference](https://github.com/rnentjes/Prevayler-Reference) - For simple in-memory persistence
 * [Simple templates](https://github.com/rnentjes/Very-simple-templates) - Simple template formatter
 * [Servlet runner](https://github.com/rnentjes/Simple-servlet-runner) - Simple web server 
 

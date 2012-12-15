@@ -1,17 +1,22 @@
 package nl.astraeus.forum.model;
 
 import nl.astraeus.persistence.Filter;
-import nl.astraeus.persistence.SimpleDao;
+import nl.astraeus.persistence.SimplePersistentDao;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * User: rnentjes
  * Date: 3/28/12
  * Time: 8:42 PM
  */
-public class MemberDao extends SimpleDao<Member> {
-    
+public class MemberDao extends SimplePersistentDao<Member> {
+
+    private static Random random = new Random(System.nanoTime());
+
     private static class NickNameFilter extends Filter<Member> {
         private String nickName;
 
@@ -52,5 +57,11 @@ public class MemberDao extends SimpleDao<Member> {
         System.out.println("Storing member ("+model+") "+model.getNickName()+", topics: "+model.getTopics().size()+", comments: "+model.getComments().size());
 
         super.store(model);
+    }
+
+    public Member findRandom() {
+        List<Member> members = new LinkedList<Member>(findAll());
+
+        return members.get(random.nextInt(members.size()));
     }
 }

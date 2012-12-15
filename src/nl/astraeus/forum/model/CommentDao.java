@@ -1,11 +1,11 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.SimpleDao;
+import nl.astraeus.persistence.SimplePersistentDao;
 
 /**
  * User: rnentjes
  * Date: 3/28/12
  * Time: 3:46 PM
  */
-public class CommentDao extends SimpleDao<Comment> {
+public class CommentDao extends SimplePersistentDao<Comment> {
 }

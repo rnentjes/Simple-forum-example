@@ -1,7 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.SimpleModel;
-import nl.astraeus.persistence.SimpleReference;
+import nl.astraeus.persistence.SimplePersistent;
+import nl.astraeus.persistence.SimplePersistentReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,12 +12,12 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:14 PM
  */
-public class Comment extends SimpleModel {
+public class Comment extends SimplePersistent {
     public final static long serialVersionUID = -9038882251579382910L;
 
     private long date = System.currentTimeMillis();
     private String description = "";
-    private SimpleReference<Member> creator = new SimpleReference<Member>(Member.class);
+    private SimplePersistentReference<Member> creator = new SimplePersistentReference<Member>(Member.class);
 
     public Comment() {}
 

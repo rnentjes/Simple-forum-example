@@ -1,7 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.SimpleList;
-import nl.astraeus.persistence.SimpleModel;
+import nl.astraeus.persistence.SimplePersistent;
+import nl.astraeus.persistence.SimplePersistentList;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:16 PM
  */
-public class Member extends SimpleModel {
+public class Member extends SimplePersistent {
     public final static long serialVersionUID = 1L;
 
     private String nickName;
@@ -21,8 +21,8 @@ public class Member extends SimpleModel {
     private boolean superuser;
     private Date created;
     private Date lastPost;
-    private SimpleList<Comment> comments;
-    private SimpleList<Topic> topics;
+    private SimplePersistentList<Comment> comments;
+    private SimplePersistentList<Topic> topics;
 
     public Member() {
         this("","","");
@@ -75,17 +75,17 @@ public class Member extends SimpleModel {
         return getNickName();
     }
 
-    public SimpleList<Comment> getComments() {
+    public SimplePersistentList<Comment> getComments() {
         if (comments == null) {
-            comments = new SimpleList<Comment>(Comment.class);
+            comments = new SimplePersistentList<Comment>(Comment.class);
         }
         
         return comments;
     }
 
-    public SimpleList<Topic> getTopics() {
+    public SimplePersistentList<Topic> getTopics() {
         if (topics == null) {
-            topics = new SimpleList<Topic>(Topic.class);
+            topics = new SimplePersistentList<Topic>(Topic.class);
         }
 
         return topics;

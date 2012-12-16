@@ -30,12 +30,18 @@ public abstract class Page {
         this.action = action;
     }
 
+    public void get(HttpServletRequest request) {
+        sendResponse(501);
+    }
+
     public void post(HttpServletRequest request) {
         sendResponse(501);
     }
+
     public void put(HttpServletRequest request) {
         sendResponse(501);
     }
+
     public void delete(HttpServletRequest request) {
         sendResponse(501);
     }

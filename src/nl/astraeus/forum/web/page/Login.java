@@ -36,10 +36,10 @@ public class Login extends TemplatePage {
 
                 redirect("/overview");
             } else {
-                Warnings.get(request).addMessage(Warnings.Message.Type.ERROR, "Login failed!", "Username and password combination was not found.");
+                Warnings.getWarnings(request).addMessage(Warnings.Message.Type.ERROR, "Login failed!", "Username and password combination was not found.");
             }
         } else {
-            Warnings.get(request).addMessage(Warnings.Message.Type.ERROR, "Login failed!", "Username and password combination was not found.");
+            Warnings.getWarnings(request).addMessage(Warnings.Message.Type.ERROR, "Login failed!", "Username and password combination was not found.");
         }
     }
 

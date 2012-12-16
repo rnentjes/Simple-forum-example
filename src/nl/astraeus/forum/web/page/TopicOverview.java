@@ -21,15 +21,12 @@ public class TopicOverview extends TemplatePage {
     private TopicDao dao = new TopicDao();
 
     public TopicOverview(String topicId) {
-        this.topicId = Long.parseLong(topicId);
-    }
-
-    public TopicOverview(String topicId, String nw) {
-        this.topicId = Long.parseLong(topicId);
-
-        if ("new".equals(nw)) {
+        if ("new".equals(topicId)) {
+            this.topicId = 0L;
             editing = true;
             description = "";
+        } else {
+            this.topicId = Long.parseLong(topicId);
         }
     }
 
@@ -42,7 +39,14 @@ public class TopicOverview extends TemplatePage {
         String description = request.getParameter("description");
 
         if (description != null && description.length() != 0) {
-            Topic topic = dao.find(topicId);
+            Topic topic = null;
+
+            if (topicId == 0L ) {
+                topic = new Topic();
+
+            } else {
+                topic = dao.find(topicId);
+            }
 
             Member member = (Member)request.getSession().getAttribute("user");
             Comment comment = new Comment(member, request.getParameter("description"));

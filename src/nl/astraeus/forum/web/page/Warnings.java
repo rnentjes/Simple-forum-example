@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Warnings extends TemplatePage {
 
-    public static Warnings get(HttpServletRequest request) {
+    public static Warnings getWarnings(HttpServletRequest request) {
         Warnings result = (Warnings)request.getAttribute("warnings");
         
         if (result == null) {

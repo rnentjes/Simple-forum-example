@@ -28,6 +28,15 @@ public class Diagnostics extends TemplatePage {
 
         authorize(request.getSession().getAttribute("user") != null);
 
+        return result;
+    }
+
+    @Override
+    public void post(HttpServletRequest request) {
+        Page result = this;
+
+        authorize(request.getSession().getAttribute("user") != null);
+
         if ("gc".equals(request.getParameter("action"))) {
             System.gc();
         } else if ("generatetopics".equals(request.getParameter("action"))) {
@@ -67,8 +76,6 @@ public class Diagnostics extends TemplatePage {
                 }
             }
         }
-
-        return result;
     }
 
     @Override

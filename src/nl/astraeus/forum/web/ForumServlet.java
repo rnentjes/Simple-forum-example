@@ -196,7 +196,7 @@ public class ForumServlet extends HttpServlet {
             } else {
                 resp.getWriter().print(head);
                 resp.getWriter().print(menu.render(req));
-                Warnings warnings = Warnings.get(req);
+                Warnings warnings = Warnings.getWarnings(req);
                 if (warnings.hasWarnings()) {
                     resp.getWriter().print(warnings.render(req));
                 }

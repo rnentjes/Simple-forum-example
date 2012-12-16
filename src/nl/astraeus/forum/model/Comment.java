@@ -1,7 +1,6 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.SimpleModel;
-import nl.astraeus.persistence.SimpleReference;
+import nl.astraeus.persistence.PersistentReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,17 +11,19 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:14 PM
  */
-public class Comment extends SimpleModel {
+public class Comment extends ForumBaseModel {
     public final static long serialVersionUID = -9038882251579382910L;
 
     private long date = System.currentTimeMillis();
     private String description = "";
-    private SimpleReference<Member> creator = new SimpleReference<Member>(Member.class);
+    private PersistentReference<Long, Member> creator = new PersistentReference<Long, Member>(Member.class);
 
-    public Comment() {}
+    public Comment() {
+        super(new CommentDao());
+    }
 
     public Comment(Member creator) {
-        this(creator, "");
+        super(new CommentDao());
     }
 
     public Comment(String description) {
@@ -30,6 +31,8 @@ public class Comment extends SimpleModel {
     }
 
     public Comment(Member creator, String description) {
+        super(new CommentDao());
+
         this.creator.set(creator);
         this.description = description;
     }

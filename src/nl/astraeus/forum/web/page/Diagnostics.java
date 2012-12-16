@@ -2,7 +2,7 @@ package nl.astraeus.forum.web.page;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
 import nl.astraeus.forum.model.*;
-import nl.astraeus.persistence.SimpleStore;
+import nl.astraeus.persistence.PersistentManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -21,10 +21,6 @@ public class Diagnostics extends TemplatePage {
     private CommentDao commentDao = new CommentDao();
     private LoremIpsum loremIpsum = new LoremIpsum();
     private Random random = new Random(System.nanoTime());
-
-
-
-
 
     @Override
     public Page processRequest(HttpServletRequest request) {
@@ -72,7 +68,6 @@ public class Diagnostics extends TemplatePage {
             }
         }
 
-
         return result;
     }
 
@@ -80,13 +75,12 @@ public class Diagnostics extends TemplatePage {
     public Map<String, Object> defineModel(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        result.put("objectMap", SimpleStore.get().getObjectTypeMap().entrySet());
+        result.put("objectMap", PersistentManager.get().getObjectTypeMap().entrySet());
 
         result.put("userMemory", ((Runtime.getRuntime().totalMemory() / (1024 * 1024)) - (Runtime.getRuntime().freeMemory() / (1024 * 1024))));
         result.put("freeMemory", (Runtime.getRuntime().freeMemory() / (1024 * 1024)));
         result.put("totalMemory", (Runtime.getRuntime().totalMemory() / (1024 * 1024)));
         result.put("maxMemory", (Runtime.getRuntime().maxMemory() / (1024 * 1024)));
-
 
         return result;
     }

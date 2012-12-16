@@ -1,8 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.SimpleList;
-import nl.astraeus.persistence.SimpleModel;
-import nl.astraeus.persistence.SimpleReference;
+import nl.astraeus.persistence.PersistentList;
+import nl.astraeus.persistence.PersistentReference;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -15,20 +14,24 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:14 PM
  */
-public class Topic extends SimpleModel {
+public class Topic extends ForumBaseModel {
     public final static long serialVersionUID = -9038882251579382910L;
 
     private long date = System.currentTimeMillis();
     private String title = "";
-    private SimpleReference<Member> creator = new SimpleReference<Member>(Member.class);
-    private SimpleList<Comment> comments;
+    private PersistentReference<Long, Member> creator = new PersistentReference<Long, Member>(Member.class);
+    private PersistentList<Long, Comment> comments;
     private int views;
     private Date lastPost;
     private DateFormat format = null;
 
-    public Topic() {}
+    public Topic() {
+        super(new TopicDao());
+    }
     
     public Topic(Member creator) {
+        super(new TopicDao());
+
         this.creator.set(creator);
     }
     
@@ -84,9 +87,9 @@ public class Topic extends SimpleModel {
         }
     }
 
-    public SimpleList<Comment> getComments() {
+    public PersistentList<Long, Comment> getComments() {
         if (comments == null) {
-            comments = new SimpleList<Comment>(Comment.class);
+            comments = new PersistentList<Long, Comment>(Comment.class);
         }
 
         return comments;

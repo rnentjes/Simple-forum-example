@@ -5,7 +5,7 @@ import nl.astraeus.forum.model.MemberDao;
 import nl.astraeus.forum.util.IOUtils;
 import nl.astraeus.forum.web.page.*;
 import nl.astraeus.http.HttpMethod;
-import nl.astraeus.persistence.SimpleStore;
+import nl.astraeus.persistence.PersistentManager;
 import nl.astraeus.persistence.Transaction;
 import nl.astraeus.util.Util;
 
@@ -88,8 +88,8 @@ public class ForumServlet extends HttpServlet {
             throw new ServletException(e);
         }
 
-        System.setProperty(SimpleStore.AUTOCOMMIT, String.valueOf(false));
-        System.setProperty(SimpleStore.SAFEMODE, String.valueOf(true));
+        System.setProperty(PersistentManager.AUTOCOMMIT, String.valueOf(false));
+        System.setProperty(PersistentManager.SAFEMODE, String.valueOf(true));
     }
 
     protected void handle(final HttpServletRequest req, HttpServletResponse resp, final HttpMethod method) throws ServletException, IOException {

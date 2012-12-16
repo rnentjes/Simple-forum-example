@@ -1,7 +1,8 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.PersistentList;
-import nl.astraeus.persistence.PersistentReference;
+import nl.astraeus.persistence.SimplePersistent;
+import nl.astraeus.persistence.SimplePersistentList;
+import nl.astraeus.persistence.SimplePersistentReference;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -14,24 +15,20 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:14 PM
  */
-public class Topic extends ForumBaseModel {
+public class Topic extends SimplePersistent {
     public final static long serialVersionUID = -9038882251579382910L;
 
     private long date = System.currentTimeMillis();
     private String title = "";
-    private PersistentReference<Long, Member> creator = new PersistentReference<Long, Member>(Member.class);
-    private PersistentList<Long, Comment> comments;
+    private SimplePersistentReference<Member> creator = new SimplePersistentReference<Member>(Member.class);
+    private SimplePersistentList<Comment> comments;
     private int views;
     private Date lastPost;
     private DateFormat format = null;
 
-    public Topic() {
-        super(new TopicDao());
-    }
+    public Topic() {}
     
     public Topic(Member creator) {
-        super(new TopicDao());
-
         this.creator.set(creator);
     }
     
@@ -87,9 +84,9 @@ public class Topic extends ForumBaseModel {
         }
     }
 
-    public PersistentList<Long, Comment> getComments() {
+    public SimplePersistentList<Comment> getComments() {
         if (comments == null) {
-            comments = new PersistentList<Long, Comment>(Comment.class);
+            comments = new SimplePersistentList<Comment>(Comment.class);
         }
 
         return comments;

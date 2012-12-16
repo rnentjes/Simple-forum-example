@@ -1,27 +1,23 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.PersistentList;
+import nl.astraeus.persistence.SimplePersistent;
+import nl.astraeus.persistence.SimplePersistentList;
 
 /**
  * User: rnentjes
  * Date: 3/28/12
  * Time: 3:07 PM
  */
-public class Forum extends ForumBaseModel {
+public class Forum extends SimplePersistent {
     public final static long serialVersionUID = 1L;
 
     private String name;
-
-    private PersistentList<Long, Topic> topic = new PersistentList<Long, Topic>(Topic.class);
-    private PersistentList<Long, Member> member = new PersistentList<Long, Member>(Member.class);
+    private SimplePersistentList<Topic> topic = new SimplePersistentList<Topic>(Topic.class);
+    private SimplePersistentList<Member> member = new SimplePersistentList<Member>(Member.class);
     
-    public Forum() {
-        super(new ForumBaseDao());
-    }
+    public Forum() {}
     
     public Forum(String name) {
-        super(new ForumBaseDao());
-
         this.name = name;
     }
 }

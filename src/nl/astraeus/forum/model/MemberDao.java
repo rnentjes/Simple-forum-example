@@ -1,5 +1,9 @@
 package nl.astraeus.forum.model;
 
+import nl.astraeus.persistence.Filter;
+import nl.astraeus.persistence.SimplePersistentDao;
+
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -9,10 +13,23 @@ import java.util.Random;
  * Date: 3/28/12
  * Time: 8:42 PM
  */
-public class MemberDao extends ForumBaseDao<Member> {
+public class MemberDao extends SimplePersistentDao<Member> {
 
     private static Random random = new Random(System.nanoTime());
 
+    private static class NickNameFilter extends Filter<Member> {
+        private String nickName;
+
+        private NickNameFilter(String nickName) {
+            this.nickName = nickName;
+        }
+
+        @Override
+        public boolean include(Member model) {
+            return nickName.equals(model.getNickName());
+        }
+    }
+    
     public Member login(final String nickName, String password) {
         Member result = findByNickName(nickName);
 
@@ -24,7 +41,15 @@ public class MemberDao extends ForumBaseDao<Member> {
     }
 
     public Member findByNickName(String nickName) {
-        return createQuery().equals("nickName", nickName).getSingleResult();
+        Member result = null;
+
+        Collection<Member> members = filter(new NickNameFilter(nickName));
+
+        if (members.size() == 1) {
+            result = members.iterator().next();
+        }
+
+        return result;
     }
 
     @Override
@@ -35,8 +60,8 @@ public class MemberDao extends ForumBaseDao<Member> {
     }
 
     public Member findRandom() {
-        List<Member> list = new LinkedList<Member>(findAll());
+        List<Member> members = new LinkedList<Member>(findAll());
 
-        return list.get(random.nextInt(list.size()));
+        return members.get(random.nextInt(members.size()));
     }
 }

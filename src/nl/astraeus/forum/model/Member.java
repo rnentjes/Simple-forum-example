@@ -1,6 +1,7 @@
 package nl.astraeus.forum.model;
 
-import nl.astraeus.persistence.PersistentList;
+import nl.astraeus.persistence.SimplePersistent;
+import nl.astraeus.persistence.SimplePersistentList;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,7 +12,7 @@ import java.util.Date;
  * Date: 3/28/12
  * Time: 3:16 PM
  */
-public class Member extends ForumBaseModel {
+public class Member extends SimplePersistent {
     public final static long serialVersionUID = 1L;
 
     private String nickName;
@@ -20,16 +21,14 @@ public class Member extends ForumBaseModel {
     private boolean superuser;
     private Date created;
     private Date lastPost;
-    private PersistentList<Long, Comment> comments;
-    private PersistentList<Long, Topic> topics;
+    private SimplePersistentList<Comment> comments;
+    private SimplePersistentList<Topic> topics;
 
     public Member() {
         this("","","");
     }
 
     public Member(String nickName, String password, String email) {
-        super(new MemberDao());
-
         this.nickName = nickName;
         this.password = password;
         this.email = email;
@@ -76,17 +75,17 @@ public class Member extends ForumBaseModel {
         return getNickName();
     }
 
-    public PersistentList<Long, Comment> getComments() {
+    public SimplePersistentList<Comment> getComments() {
         if (comments == null) {
-            comments = new PersistentList<Long, Comment>(Comment.class);
+            comments = new SimplePersistentList<Comment>(Comment.class);
         }
         
         return comments;
     }
 
-    public PersistentList<Long, Topic> getTopics() {
+    public SimplePersistentList<Topic> getTopics() {
         if (topics == null) {
-            topics = new PersistentList<Long, Topic>(Topic.class);
+            topics = new SimplePersistentList<Topic>(Topic.class);
         }
 
         return topics;
@@ -135,6 +134,4 @@ public class Member extends ForumBaseModel {
     public int getNumberOfComments() {
         return getComments().size();
     }
-
-
 }
